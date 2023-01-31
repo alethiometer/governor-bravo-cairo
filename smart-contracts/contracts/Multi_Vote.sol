@@ -20,6 +20,8 @@ contract Multi_Vote {
         uint256 total_availible;
         uint256 total_power;
         mapping(address => uint256) delegates;
+        mapping(uint256 => address) history;
+        uint256 history_size;
     }
 
     uint256 private curr_proposal;
@@ -79,6 +81,14 @@ contract Multi_Vote {
 
         User storage to_user = users[_to];
 
+        // NOTE THIS SHOULD NOT BE IN PRODUCTION.
+        // IT IS A CRUDE WAY TO AVOID USING A DATABASE TO STORE THE LIST OF CURRENT DELEGETTEES
+        if(from_user.delegates[_to] == 0) {
+            from_user.history[from_user.history_size] = _to;
+            from_user.history_size ++;
+        }
+        //-----------------------------------------
+
         //_from's availible goes down
         from_user.total_availible -= _amount;
 
@@ -87,6 +97,7 @@ contract Multi_Vote {
 
         //_to's voting power goes up
         to_user.total_power += _amount;
+        
     }
 
     function undelegate(address _to, uint256 _amount) public {
@@ -253,6 +264,14 @@ contract Multi_Vote {
 
     function get_user_delgated_amount(address user, address delegatee) view public returns(uint256) {
         return users[user].delegates[delegatee];
+    }
+
+    function get_user_history_size(address user) view public returns(uint256) {
+        return users[user].history_size;
+    }
+
+    function get_user_history(address user, uint256 index) view public returns(address) {
+        return users[user].history[index];
     }
     
 }
