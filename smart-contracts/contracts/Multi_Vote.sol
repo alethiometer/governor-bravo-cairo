@@ -28,6 +28,7 @@ contract Multi_Vote {
     mapping(uint256 => Proposal) private proposals;
     mapping(address => User) private users;
 
+    address owner;
 
     constructor(uint256 _total_supply) {
         total_supply = _total_supply;
@@ -38,6 +39,13 @@ contract Multi_Vote {
         //upon creating, the creator get the whol supply <--- implement a mint function in the future
         from_user.total_availible += _total_supply;
         from_user.total_balance += _total_supply;
+
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner {
+        require(owner == msg.sender, "Ownable: caller is not the owner");
+        _;
     }
 
     function transferTo(address _to, uint256 _amount) public {
@@ -105,14 +113,14 @@ contract Multi_Vote {
 
     }
 
-    function propose() public {
+    function propose() public onlyOwner {
         // note we have not mechanism for deciding who can propose
         require(!vote_in_progress, "vote in progress");
         curr_proposal++;
         vote_in_progress = true;
     }
 
-    function end_vote() public returns (uint8 result) {
+    function end_vote() public onlyOwner returns (uint8 result) {
 
         // note we have not mechanism for deciding who can endd the vote
         require(vote_in_progress, "vote not in progress");
