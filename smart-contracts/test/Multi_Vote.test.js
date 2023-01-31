@@ -216,6 +216,43 @@ describe("Multi_Vote", () => {
             await test_vote_info(0, 0, 0, 0, 0);
 
         });
+
+        it("user 1 can end proposal", async () => { 
+            await propose(addr1);
+
+            expect(await get_curr_proposal()).to.equal(1);
+            expect(await get_vote_in_progress()).to.equal(true);
+
+            await test_vote_info(0, 0, 0, 0, 0);
+            await test_vote_info(1, 0, 0, 0, 0);
+            
+            await end_vote(addr1);
+
+            expect(await get_curr_proposal()).to.equal(1);
+            expect(await get_vote_in_progress()).to.equal(false);
+
+            await test_vote_info(0, 0, 0, 0, 0);
+            await test_vote_info(1, 0, 0, 0, 3);
+        });
+
+        it("user 2 can't end proposal", async () => { 
+            await propose(addr1);
+
+            expect(await get_curr_proposal()).to.equal(1);
+            expect(await get_vote_in_progress()).to.equal(true);
+
+            await test_vote_info(0, 0, 0, 0, 0);
+            await test_vote_info(1, 0, 0, 0, 0);
+            
+
+            await expect(end_vote(addr2)).to.be.reverted;
+
+            expect(await get_curr_proposal()).to.equal(1);
+            expect(await get_vote_in_progress()).to.equal(true);
+
+            await test_vote_info(0, 0, 0, 0, 0);
+            await test_vote_info(1, 0, 0, 0, 0);
+        });
     });
 
 });
