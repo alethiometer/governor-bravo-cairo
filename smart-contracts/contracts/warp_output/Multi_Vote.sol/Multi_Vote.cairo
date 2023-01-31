@@ -38,6 +38,8 @@ struct User_ba076238{
     total_availible : Uint256,
     total_power : Uint256,
     delegates : felt,
+    history : felt,
+    history_size : Uint256,
 }
 
 
@@ -76,7 +78,7 @@ func WSM3_Proposal_2cb16fd2_result(loc: felt) -> (memberLoc: felt){
     return (loc + 7,);
 }
 
-func WSM8_Proposal_2cb16fd2_votes(loc: felt) -> (memberLoc: felt){
+func WSM10_Proposal_2cb16fd2_votes(loc: felt) -> (memberLoc: felt){
     return (loc + 6,);
 }
 
@@ -92,15 +94,23 @@ func WSM6_User_ba076238_delegates(loc: felt) -> (memberLoc: felt){
     return (loc + 6,);
 }
 
-func WSM7_User_ba076238_total_power(loc: felt) -> (memberLoc: felt){
+func WSM7_User_ba076238_history(loc: felt) -> (memberLoc: felt){
+    return (loc + 7,);
+}
+
+func WSM8_User_ba076238_history_size(loc: felt) -> (memberLoc: felt){
+    return (loc + 8,);
+}
+
+func WSM9_User_ba076238_total_power(loc: felt) -> (memberLoc: felt){
     return (loc + 4,);
 }
 
-func WSM9_Vote_a1796658_amount(loc: felt) -> (memberLoc: felt){
+func WSM11_Vote_a1796658_amount(loc: felt) -> (memberLoc: felt){
     return (loc,);
 }
 
-func WSM10_Vote_a1796658_position(loc: felt) -> (memberLoc: felt){
+func WSM12_Vote_a1796658_position(loc: felt) -> (memberLoc: felt){
     return (loc + 2,);
 }
 
@@ -170,7 +180,7 @@ func WS1_INDEX_felt_to_User_ba076238{syscall_ptr : felt*, pedersen_ptr : HashBui
     let (existing) = WARP_MAPPING1.read(name, index);
     if (existing == 0){
         let (used) = WARP_USED_STORAGE.read();
-        WARP_USED_STORAGE.write(used + 7);
+        WARP_USED_STORAGE.write(used + 10);
         WARP_MAPPING1.write(name, index, used);
         return (used,);
     }else{
@@ -195,15 +205,31 @@ func WS2_INDEX_felt_to_Uint256{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
 }
 
 @storage_var
-func WARP_MAPPING3(name: felt, index: felt) -> (resLoc : felt){
+func WARP_MAPPING3(name: felt, index: Uint256) -> (resLoc : felt){
 }
-func WS3_INDEX_felt_to_Vote_a1796658{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt}(name: felt, index: felt) -> (res: felt){
+func WS3_INDEX_Uint256_to_felt{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt}(name: felt, index: Uint256) -> (res: felt){
     alloc_locals;
     let (existing) = WARP_MAPPING3.read(name, index);
     if (existing == 0){
         let (used) = WARP_USED_STORAGE.read();
-        WARP_USED_STORAGE.write(used + 3);
+        WARP_USED_STORAGE.write(used + 1);
         WARP_MAPPING3.write(name, index, used);
+        return (used,);
+    }else{
+        return (existing,);
+    }
+}
+
+@storage_var
+func WARP_MAPPING4(name: felt, index: felt) -> (resLoc : felt){
+}
+func WS4_INDEX_felt_to_Vote_a1796658{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt}(name: felt, index: felt) -> (res: felt){
+    alloc_locals;
+    let (existing) = WARP_MAPPING4.read(name, index);
+    if (existing == 0){
+        let (used) = WARP_USED_STORAGE.read();
+        WARP_USED_STORAGE.write(used + 3);
+        WARP_MAPPING4.write(name, index, used);
         return (used,);
     }else{
         return (existing,);
@@ -545,14 +571,66 @@ namespace Multi_Vote{
     }
 
 
+    func delegateTo_8bcd4620_if_part1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt, bitwise_ptr : BitwiseBuiltin*}(__warp_18_from_user : felt, __warp_16__amount : Uint256, __warp_15__to : felt, __warp_20_to_user : felt)-> (){
+    alloc_locals;
+
+
+        
+        let (__warp_se_77) = WSM4_User_ba076238_total_availible(__warp_18_from_user);
+        
+        let (__warp_se_78) = WSM4_User_ba076238_total_availible(__warp_18_from_user);
+        
+        let (__warp_se_79) = WS2_READ_Uint256(__warp_se_78);
+        
+        let (__warp_se_80) = warp_sub256(__warp_se_79, __warp_16__amount);
+        
+        WS_WRITE1(__warp_se_77, __warp_se_80);
+        
+        let __warp_cs_0 = __warp_15__to;
+        
+        let (__warp_se_81) = WSM6_User_ba076238_delegates(__warp_18_from_user);
+        
+        let (__warp_se_82) = WS0_READ_warp_id(__warp_se_81);
+        
+        let (__warp_se_83) = WS2_INDEX_felt_to_Uint256(__warp_se_82, __warp_cs_0);
+        
+        let (__warp_se_84) = WSM6_User_ba076238_delegates(__warp_18_from_user);
+        
+        let (__warp_se_85) = WS0_READ_warp_id(__warp_se_84);
+        
+        let (__warp_se_86) = WS2_INDEX_felt_to_Uint256(__warp_se_85, __warp_cs_0);
+        
+        let (__warp_se_87) = WS2_READ_Uint256(__warp_se_86);
+        
+        let (__warp_se_88) = warp_add256(__warp_se_87, __warp_16__amount);
+        
+        WS_WRITE1(__warp_se_83, __warp_se_88);
+        
+        let (__warp_se_89) = WSM9_User_ba076238_total_power(__warp_20_to_user);
+        
+        let (__warp_se_90) = WSM9_User_ba076238_total_power(__warp_20_to_user);
+        
+        let (__warp_se_91) = WS2_READ_Uint256(__warp_se_90);
+        
+        let (__warp_se_92) = warp_add256(__warp_se_91, __warp_16__amount);
+        
+        WS_WRITE1(__warp_se_89, __warp_se_92);
+        
+        
+        
+        return ();
+
+    }
+
+
     func __warp_conditional___warp_conditional_vote_d3f29ace_5_7(__warp_28__position : felt)-> (__warp_rc_6 : felt, __warp_28__position : felt){
     alloc_locals;
 
 
         
-        let (__warp_se_101) = warp_eq(__warp_28__position, 1);
+        let (__warp_se_114) = warp_eq(__warp_28__position, 1);
         
-        if (__warp_se_101 != 0){
+        if (__warp_se_114 != 0){
         
             
             let __warp_rc_6 = 1;
@@ -567,9 +645,9 @@ namespace Multi_Vote{
         }else{
         
             
-            let (__warp_se_102) = warp_eq(__warp_28__position, 2);
+            let (__warp_se_115) = warp_eq(__warp_28__position, 2);
             
-            let __warp_rc_6 = __warp_se_102;
+            let __warp_rc_6 = __warp_se_115;
             
             let __warp_rc_6 = __warp_rc_6;
             
@@ -612,9 +690,9 @@ namespace Multi_Vote{
         }else{
         
             
-            let (__warp_se_103) = warp_eq(__warp_28__position, 3);
+            let (__warp_se_116) = warp_eq(__warp_28__position, 3);
             
-            let __warp_rc_4 = __warp_se_103;
+            let __warp_rc_4 = __warp_se_116;
             
             let __warp_rc_4 = __warp_rc_4;
             
@@ -637,7 +715,7 @@ namespace Multi_Vote{
         
         vote_d3f29ace_if_part1(__warp_31_proposal, __warp_30__from, __warp_32_from_vote);
         
-        let __warp_uv7 = ();
+        let __warp_uv9 = ();
         
         
         
@@ -651,13 +729,13 @@ namespace Multi_Vote{
 
 
         
-        let (__warp_se_131) = WSM8_Proposal_2cb16fd2_votes(__warp_31_proposal);
+        let (__warp_se_144) = WSM10_Proposal_2cb16fd2_votes(__warp_31_proposal);
         
-        let (__warp_se_132) = WS0_READ_warp_id(__warp_se_131);
+        let (__warp_se_145) = WS0_READ_warp_id(__warp_se_144);
         
-        let (__warp_se_133) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_132, __warp_30__from);
+        let (__warp_se_146) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_145, __warp_30__from);
         
-        wm_to_storage0(__warp_se_133, __warp_32_from_vote);
+        wm_to_storage0(__warp_se_146, __warp_32_from_vote);
         
         
         
@@ -675,7 +753,7 @@ namespace Multi_Vote{
         
         unVote_2c70d64e_if_part1(__warp_36_from_vote, __warp_35_proposal, __warp_34__from);
         
-        let __warp_uv8 = ();
+        let __warp_uv10 = ();
         
         
         
@@ -689,21 +767,21 @@ namespace Multi_Vote{
 
 
         
-        let (__warp_se_156) = WM0_Vote_a1796658_amount(__warp_36_from_vote);
+        let (__warp_se_169) = WM0_Vote_a1796658_amount(__warp_36_from_vote);
         
-        wm_write_256(__warp_se_156, Uint256(low=0, high=0));
+        wm_write_256(__warp_se_169, Uint256(low=0, high=0));
         
-        let (__warp_se_157) = WM1_Vote_a1796658_position(__warp_36_from_vote);
+        let (__warp_se_170) = WM1_Vote_a1796658_position(__warp_36_from_vote);
         
-        wm_write_felt(__warp_se_157, 0);
+        wm_write_felt(__warp_se_170, 0);
         
-        let (__warp_se_158) = WSM8_Proposal_2cb16fd2_votes(__warp_35_proposal);
+        let (__warp_se_171) = WSM10_Proposal_2cb16fd2_votes(__warp_35_proposal);
         
-        let (__warp_se_159) = WS0_READ_warp_id(__warp_se_158);
+        let (__warp_se_172) = WS0_READ_warp_id(__warp_se_171);
         
-        let (__warp_se_160) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_159, __warp_34__from);
+        let (__warp_se_173) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_172, __warp_34__from);
         
-        wm_to_storage0(__warp_se_160, __warp_36_from_vote);
+        wm_to_storage0(__warp_se_173, __warp_36_from_vote);
         
         
         
@@ -813,49 +891,62 @@ namespace Multi_Vote{
         
         let (__warp_20_to_user) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_15__to);
         
-        let (__warp_se_64) = WSM4_User_ba076238_total_availible(__warp_18_from_user);
+        let (__warp_se_64) = WSM6_User_ba076238_delegates(__warp_18_from_user);
         
-        let (__warp_se_65) = WSM4_User_ba076238_total_availible(__warp_18_from_user);
+        let (__warp_se_65) = WS0_READ_warp_id(__warp_se_64);
         
-        let (__warp_se_66) = WS2_READ_Uint256(__warp_se_65);
+        let (__warp_se_66) = WS2_INDEX_felt_to_Uint256(__warp_se_65, __warp_15__to);
         
-        let (__warp_se_67) = warp_sub256(__warp_se_66, __warp_16__amount);
+        let (__warp_se_67) = WS2_READ_Uint256(__warp_se_66);
         
-        WS_WRITE1(__warp_se_64, __warp_se_67);
+        let (__warp_se_68) = warp_eq256(__warp_se_67, Uint256(low=0, high=0));
         
-        let __warp_cs_0 = __warp_15__to;
+        if (__warp_se_68 != 0){
         
-        let (__warp_se_68) = WSM6_User_ba076238_delegates(__warp_18_from_user);
+            
+                
+                let (__warp_se_69) = WSM7_User_ba076238_history(__warp_18_from_user);
+                
+                let (__warp_se_70) = WS0_READ_warp_id(__warp_se_69);
+                
+                let (__warp_se_71) = WSM8_User_ba076238_history_size(__warp_18_from_user);
+                
+                let (__warp_se_72) = WS2_READ_Uint256(__warp_se_71);
+                
+                let (__warp_se_73) = WS3_INDEX_Uint256_to_felt(__warp_se_70, __warp_se_72);
+                
+                WS_WRITE0(__warp_se_73, __warp_15__to);
+                
+                let (__warp_se_74) = WSM8_User_ba076238_history_size(__warp_18_from_user);
+                
+                let (__warp_se_75) = WS2_READ_Uint256(__warp_se_74);
+                
+                let (__warp_pse_1) = warp_add256(__warp_se_75, Uint256(low=1, high=0));
+                
+                let (__warp_se_76) = WSM8_User_ba076238_history_size(__warp_18_from_user);
+                
+                WS_WRITE1(__warp_se_76, __warp_pse_1);
+                
+                warp_sub256(__warp_pse_1, Uint256(low=1, high=0));
+            
+            Multi_Vote.delegateTo_8bcd4620_if_part1(__warp_18_from_user, __warp_16__amount, __warp_15__to, __warp_20_to_user);
+            
+            let __warp_uv0 = ();
+            
+            
+            
+            return ();
+        }else{
         
-        let (__warp_se_69) = WS0_READ_warp_id(__warp_se_68);
-        
-        let (__warp_se_70) = WS2_INDEX_felt_to_Uint256(__warp_se_69, __warp_cs_0);
-        
-        let (__warp_se_71) = WSM6_User_ba076238_delegates(__warp_18_from_user);
-        
-        let (__warp_se_72) = WS0_READ_warp_id(__warp_se_71);
-        
-        let (__warp_se_73) = WS2_INDEX_felt_to_Uint256(__warp_se_72, __warp_cs_0);
-        
-        let (__warp_se_74) = WS2_READ_Uint256(__warp_se_73);
-        
-        let (__warp_se_75) = warp_add256(__warp_se_74, __warp_16__amount);
-        
-        WS_WRITE1(__warp_se_70, __warp_se_75);
-        
-        let (__warp_se_76) = WSM7_User_ba076238_total_power(__warp_20_to_user);
-        
-        let (__warp_se_77) = WSM7_User_ba076238_total_power(__warp_20_to_user);
-        
-        let (__warp_se_78) = WS2_READ_Uint256(__warp_se_77);
-        
-        let (__warp_se_79) = warp_add256(__warp_se_78, __warp_16__amount);
-        
-        WS_WRITE1(__warp_se_76, __warp_se_79);
-        
-        
-        
-        return ();
+            
+            Multi_Vote.delegateTo_8bcd4620_if_part1(__warp_18_from_user, __warp_16__amount, __warp_15__to, __warp_20_to_user);
+            
+            let __warp_uv1 = ();
+            
+            
+            
+            return ();
+        }
 
     }
 
@@ -870,71 +961,71 @@ namespace Multi_Vote{
         
         warp_external_input_check_address(__warp_21__to);
         
-        let (__warp_se_80) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
+        let (__warp_se_93) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
         
         with_attr error_message("vote in progress"){
-            assert 1 - __warp_se_80 = 1;
+            assert 1 - __warp_se_93 = 1;
         }
         
         let (__warp_23__from) = get_caller_address();
         
         let (__warp_24_from_user) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_23__from);
         
-        let (__warp_se_81) = WSM6_User_ba076238_delegates(__warp_24_from_user);
+        let (__warp_se_94) = WSM6_User_ba076238_delegates(__warp_24_from_user);
         
-        let (__warp_se_82) = WS0_READ_warp_id(__warp_se_81);
+        let (__warp_se_95) = WS0_READ_warp_id(__warp_se_94);
         
-        let (__warp_se_83) = WS2_INDEX_felt_to_Uint256(__warp_se_82, __warp_21__to);
+        let (__warp_se_96) = WS2_INDEX_felt_to_Uint256(__warp_se_95, __warp_21__to);
         
-        let (__warp_25_current_delgated) = WS2_READ_Uint256(__warp_se_83);
+        let (__warp_25_current_delgated) = WS2_READ_Uint256(__warp_se_96);
         
-        let (__warp_se_84) = warp_ge256(__warp_25_current_delgated, __warp_22__amount);
+        let (__warp_se_97) = warp_ge256(__warp_25_current_delgated, __warp_22__amount);
         
         with_attr error_message("undelgating more than balance"){
-            assert __warp_se_84 = 1;
+            assert __warp_se_97 = 1;
         }
         
         let (__warp_26_to_user) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_21__to);
         
-        let (__warp_se_85) = WSM4_User_ba076238_total_availible(__warp_24_from_user);
+        let (__warp_se_98) = WSM4_User_ba076238_total_availible(__warp_24_from_user);
         
-        let (__warp_se_86) = WSM4_User_ba076238_total_availible(__warp_24_from_user);
+        let (__warp_se_99) = WSM4_User_ba076238_total_availible(__warp_24_from_user);
         
-        let (__warp_se_87) = WS2_READ_Uint256(__warp_se_86);
+        let (__warp_se_100) = WS2_READ_Uint256(__warp_se_99);
         
-        let (__warp_se_88) = warp_add256(__warp_se_87, __warp_22__amount);
+        let (__warp_se_101) = warp_add256(__warp_se_100, __warp_22__amount);
         
-        WS_WRITE1(__warp_se_85, __warp_se_88);
+        WS_WRITE1(__warp_se_98, __warp_se_101);
         
         let __warp_cs_1 = __warp_21__to;
         
-        let (__warp_se_89) = WSM6_User_ba076238_delegates(__warp_24_from_user);
+        let (__warp_se_102) = WSM6_User_ba076238_delegates(__warp_24_from_user);
         
-        let (__warp_se_90) = WS0_READ_warp_id(__warp_se_89);
+        let (__warp_se_103) = WS0_READ_warp_id(__warp_se_102);
         
-        let (__warp_se_91) = WS2_INDEX_felt_to_Uint256(__warp_se_90, __warp_cs_1);
+        let (__warp_se_104) = WS2_INDEX_felt_to_Uint256(__warp_se_103, __warp_cs_1);
         
-        let (__warp_se_92) = WSM6_User_ba076238_delegates(__warp_24_from_user);
+        let (__warp_se_105) = WSM6_User_ba076238_delegates(__warp_24_from_user);
         
-        let (__warp_se_93) = WS0_READ_warp_id(__warp_se_92);
+        let (__warp_se_106) = WS0_READ_warp_id(__warp_se_105);
         
-        let (__warp_se_94) = WS2_INDEX_felt_to_Uint256(__warp_se_93, __warp_cs_1);
+        let (__warp_se_107) = WS2_INDEX_felt_to_Uint256(__warp_se_106, __warp_cs_1);
         
-        let (__warp_se_95) = WS2_READ_Uint256(__warp_se_94);
+        let (__warp_se_108) = WS2_READ_Uint256(__warp_se_107);
         
-        let (__warp_se_96) = warp_sub256(__warp_se_95, __warp_22__amount);
+        let (__warp_se_109) = warp_sub256(__warp_se_108, __warp_22__amount);
         
-        WS_WRITE1(__warp_se_91, __warp_se_96);
+        WS_WRITE1(__warp_se_104, __warp_se_109);
         
-        let (__warp_se_97) = WSM7_User_ba076238_total_power(__warp_26_to_user);
+        let (__warp_se_110) = WSM9_User_ba076238_total_power(__warp_26_to_user);
         
-        let (__warp_se_98) = WSM7_User_ba076238_total_power(__warp_26_to_user);
+        let (__warp_se_111) = WSM9_User_ba076238_total_power(__warp_26_to_user);
         
-        let (__warp_se_99) = WS2_READ_Uint256(__warp_se_98);
+        let (__warp_se_112) = WS2_READ_Uint256(__warp_se_111);
         
-        let (__warp_se_100) = warp_sub256(__warp_se_99, __warp_22__amount);
+        let (__warp_se_113) = warp_sub256(__warp_se_112, __warp_22__amount);
         
-        WS_WRITE1(__warp_se_97, __warp_se_100);
+        WS_WRITE1(__warp_se_110, __warp_se_113);
         
         
         
@@ -951,7 +1042,7 @@ namespace Multi_Vote{
         
         Multi_Vote.__warp_modifier_onlyOwner_propose_c198f8ba_1();
         
-        let __warp_uv0 = ();
+        let __warp_uv2 = ();
         
         
         
@@ -968,11 +1059,11 @@ namespace Multi_Vote{
         
         let result = 0;
         
-        let (__warp_pse_1) = Multi_Vote.__warp_modifier_onlyOwner_end_vote_1f6933c3_5(result);
+        let (__warp_pse_2) = Multi_Vote.__warp_modifier_onlyOwner_end_vote_1f6933c3_5(result);
         
         
         
-        return (__warp_pse_1,);
+        return (__warp_pse_2,);
 
     }
 
@@ -990,10 +1081,10 @@ namespace Multi_Vote{
         
         warp_external_input_check_int8(__warp_28__position);
         
-        let (__warp_se_104) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
+        let (__warp_se_117) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
         
         with_attr error_message("vote in progress"){
-            assert __warp_se_104 = 1;
+            assert __warp_se_117 = 1;
         }
         
         let __warp_rc_4 = 0;
@@ -1011,67 +1102,67 @@ namespace Multi_Vote{
         
         let (__warp_30__from) = get_caller_address();
         
-        let (__warp_se_105) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
+        let (__warp_se_118) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
         
-        let (__warp_31_proposal) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_se_105);
+        let (__warp_31_proposal) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_se_118);
         
-        let (__warp_se_106) = WSM8_Proposal_2cb16fd2_votes(__warp_31_proposal);
+        let (__warp_se_119) = WSM10_Proposal_2cb16fd2_votes(__warp_31_proposal);
         
-        let (__warp_se_107) = WS0_READ_warp_id(__warp_se_106);
+        let (__warp_se_120) = WS0_READ_warp_id(__warp_se_119);
         
-        let (__warp_se_108) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_107, __warp_30__from);
+        let (__warp_se_121) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_120, __warp_30__from);
         
-        let (__warp_32_from_vote) = ws_to_memory0(__warp_se_108);
+        let (__warp_32_from_vote) = ws_to_memory0(__warp_se_121);
         
-        let (__warp_se_109) = WM0_Vote_a1796658_amount(__warp_32_from_vote);
+        let (__warp_se_122) = WM0_Vote_a1796658_amount(__warp_32_from_vote);
         
-        let (__warp_se_110) = wm_read_256(__warp_se_109);
+        let (__warp_se_123) = wm_read_256(__warp_se_122);
         
-        let (__warp_se_111) = warp_eq256(__warp_se_110, Uint256(low=0, high=0));
+        let (__warp_se_124) = warp_eq256(__warp_se_123, Uint256(low=0, high=0));
         
         with_attr error_message("already voted"){
-            assert __warp_se_111 = 1;
+            assert __warp_se_124 = 1;
         }
         
-        let (__warp_se_112) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_30__from);
+        let (__warp_se_125) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_30__from);
         
-        let (__warp_se_113) = WSM7_User_ba076238_total_power(__warp_se_112);
+        let (__warp_se_126) = WSM9_User_ba076238_total_power(__warp_se_125);
         
-        let (__warp_33_total_power) = WS2_READ_Uint256(__warp_se_113);
+        let (__warp_33_total_power) = WS2_READ_Uint256(__warp_se_126);
         
-        let (__warp_se_114) = warp_ge256(__warp_33_total_power, __warp_29__amount);
+        let (__warp_se_127) = warp_ge256(__warp_33_total_power, __warp_29__amount);
         
         with_attr error_message("not enough votes availible"){
-            assert __warp_se_114 = 1;
+            assert __warp_se_127 = 1;
         }
         
-        let (__warp_se_115) = WM0_Vote_a1796658_amount(__warp_32_from_vote);
+        let (__warp_se_128) = WM0_Vote_a1796658_amount(__warp_32_from_vote);
         
-        wm_write_256(__warp_se_115, __warp_29__amount);
+        wm_write_256(__warp_se_128, __warp_29__amount);
         
-        let (__warp_se_116) = WM1_Vote_a1796658_position(__warp_32_from_vote);
+        let (__warp_se_129) = WM1_Vote_a1796658_position(__warp_32_from_vote);
         
-        wm_write_felt(__warp_se_116, __warp_28__position);
+        wm_write_felt(__warp_se_129, __warp_28__position);
         
-        let (__warp_se_117) = warp_eq(__warp_28__position, 1);
+        let (__warp_se_130) = warp_eq(__warp_28__position, 1);
         
-        if (__warp_se_117 != 0){
+        if (__warp_se_130 != 0){
         
             
                 
-                let (__warp_se_118) = WSM0_Proposal_2cb16fd2_pro(__warp_31_proposal);
+                let (__warp_se_131) = WSM0_Proposal_2cb16fd2_pro(__warp_31_proposal);
                 
-                let (__warp_se_119) = WSM0_Proposal_2cb16fd2_pro(__warp_31_proposal);
+                let (__warp_se_132) = WSM0_Proposal_2cb16fd2_pro(__warp_31_proposal);
                 
-                let (__warp_se_120) = WS2_READ_Uint256(__warp_se_119);
+                let (__warp_se_133) = WS2_READ_Uint256(__warp_se_132);
                 
-                let (__warp_se_121) = warp_add256(__warp_se_120, __warp_29__amount);
+                let (__warp_se_134) = warp_add256(__warp_se_133, __warp_29__amount);
                 
-                WS_WRITE1(__warp_se_118, __warp_se_121);
+                WS_WRITE1(__warp_se_131, __warp_se_134);
             
             Multi_Vote.vote_d3f29ace_if_part1(__warp_31_proposal, __warp_30__from, __warp_32_from_vote);
             
-            let __warp_uv1 = ();
+            let __warp_uv3 = ();
             
             default_dict_finalize(warp_memory_start, warp_memory, 0);
             
@@ -1081,25 +1172,25 @@ namespace Multi_Vote{
         
             
                 
-                let (__warp_se_122) = warp_eq(__warp_28__position, 2);
+                let (__warp_se_135) = warp_eq(__warp_28__position, 2);
                 
-                if (__warp_se_122 != 0){
+                if (__warp_se_135 != 0){
                 
                     
                         
-                        let (__warp_se_123) = WSM1_Proposal_2cb16fd2_against(__warp_31_proposal);
+                        let (__warp_se_136) = WSM1_Proposal_2cb16fd2_against(__warp_31_proposal);
                         
-                        let (__warp_se_124) = WSM1_Proposal_2cb16fd2_against(__warp_31_proposal);
+                        let (__warp_se_137) = WSM1_Proposal_2cb16fd2_against(__warp_31_proposal);
                         
-                        let (__warp_se_125) = WS2_READ_Uint256(__warp_se_124);
+                        let (__warp_se_138) = WS2_READ_Uint256(__warp_se_137);
                         
-                        let (__warp_se_126) = warp_add256(__warp_se_125, __warp_29__amount);
+                        let (__warp_se_139) = warp_add256(__warp_se_138, __warp_29__amount);
                         
-                        WS_WRITE1(__warp_se_123, __warp_se_126);
+                        WS_WRITE1(__warp_se_136, __warp_se_139);
                     
                     Multi_Vote.vote_d3f29ace_if_part2(__warp_31_proposal, __warp_30__from, __warp_32_from_vote);
                     
-                    let __warp_uv2 = ();
+                    let __warp_uv4 = ();
                     
                     default_dict_finalize(warp_memory_start, warp_memory, 0);
                     
@@ -1109,19 +1200,19 @@ namespace Multi_Vote{
                 
                     
                         
-                        let (__warp_se_127) = WSM2_Proposal_2cb16fd2_abstain(__warp_31_proposal);
+                        let (__warp_se_140) = WSM2_Proposal_2cb16fd2_abstain(__warp_31_proposal);
                         
-                        let (__warp_se_128) = WSM2_Proposal_2cb16fd2_abstain(__warp_31_proposal);
+                        let (__warp_se_141) = WSM2_Proposal_2cb16fd2_abstain(__warp_31_proposal);
                         
-                        let (__warp_se_129) = WS2_READ_Uint256(__warp_se_128);
+                        let (__warp_se_142) = WS2_READ_Uint256(__warp_se_141);
                         
-                        let (__warp_se_130) = warp_add256(__warp_se_129, __warp_29__amount);
+                        let (__warp_se_143) = warp_add256(__warp_se_142, __warp_29__amount);
                         
-                        WS_WRITE1(__warp_se_127, __warp_se_130);
+                        WS_WRITE1(__warp_se_140, __warp_se_143);
                     
                     Multi_Vote.vote_d3f29ace_if_part2(__warp_31_proposal, __warp_30__from, __warp_32_from_vote);
                     
-                    let __warp_uv3 = ();
+                    let __warp_uv5 = ();
                     
                     default_dict_finalize(warp_memory_start, warp_memory, 0);
                     
@@ -1142,59 +1233,59 @@ namespace Multi_Vote{
     with warp_memory{
 
         
-        let (__warp_se_134) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
+        let (__warp_se_147) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
         
         with_attr error_message("vote in progress"){
-            assert __warp_se_134 = 1;
+            assert __warp_se_147 = 1;
         }
         
         let (__warp_34__from) = get_caller_address();
         
-        let (__warp_se_135) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
+        let (__warp_se_148) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
         
-        let (__warp_35_proposal) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_se_135);
+        let (__warp_35_proposal) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_se_148);
         
-        let (__warp_se_136) = WSM8_Proposal_2cb16fd2_votes(__warp_35_proposal);
+        let (__warp_se_149) = WSM10_Proposal_2cb16fd2_votes(__warp_35_proposal);
         
-        let (__warp_se_137) = WS0_READ_warp_id(__warp_se_136);
+        let (__warp_se_150) = WS0_READ_warp_id(__warp_se_149);
         
-        let (__warp_se_138) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_137, __warp_34__from);
+        let (__warp_se_151) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_150, __warp_34__from);
         
-        let (__warp_36_from_vote) = ws_to_memory0(__warp_se_138);
+        let (__warp_36_from_vote) = ws_to_memory0(__warp_se_151);
         
-        let (__warp_se_139) = WM1_Vote_a1796658_position(__warp_36_from_vote);
+        let (__warp_se_152) = WM1_Vote_a1796658_position(__warp_36_from_vote);
         
-        let (__warp_37_position) = wm_read_felt(__warp_se_139);
+        let (__warp_37_position) = wm_read_felt(__warp_se_152);
         
-        let (__warp_se_140) = WM0_Vote_a1796658_amount(__warp_36_from_vote);
+        let (__warp_se_153) = WM0_Vote_a1796658_amount(__warp_36_from_vote);
         
-        let (__warp_38_total_amount) = wm_read_256(__warp_se_140);
+        let (__warp_38_total_amount) = wm_read_256(__warp_se_153);
         
-        let (__warp_se_141) = warp_neq256(__warp_38_total_amount, Uint256(low=0, high=0));
+        let (__warp_se_154) = warp_neq256(__warp_38_total_amount, Uint256(low=0, high=0));
         
         with_attr error_message("not voted yet"){
-            assert __warp_se_141 = 1;
+            assert __warp_se_154 = 1;
         }
         
-        let (__warp_se_142) = warp_eq(__warp_37_position, 1);
+        let (__warp_se_155) = warp_eq(__warp_37_position, 1);
         
-        if (__warp_se_142 != 0){
+        if (__warp_se_155 != 0){
         
             
                 
-                let (__warp_se_143) = WSM0_Proposal_2cb16fd2_pro(__warp_35_proposal);
+                let (__warp_se_156) = WSM0_Proposal_2cb16fd2_pro(__warp_35_proposal);
                 
-                let (__warp_se_144) = WSM0_Proposal_2cb16fd2_pro(__warp_35_proposal);
+                let (__warp_se_157) = WSM0_Proposal_2cb16fd2_pro(__warp_35_proposal);
                 
-                let (__warp_se_145) = WS2_READ_Uint256(__warp_se_144);
+                let (__warp_se_158) = WS2_READ_Uint256(__warp_se_157);
                 
-                let (__warp_se_146) = warp_sub256(__warp_se_145, __warp_38_total_amount);
+                let (__warp_se_159) = warp_sub256(__warp_se_158, __warp_38_total_amount);
                 
-                WS_WRITE1(__warp_se_143, __warp_se_146);
+                WS_WRITE1(__warp_se_156, __warp_se_159);
             
             Multi_Vote.unVote_2c70d64e_if_part1(__warp_36_from_vote, __warp_35_proposal, __warp_34__from);
             
-            let __warp_uv4 = ();
+            let __warp_uv6 = ();
             
             default_dict_finalize(warp_memory_start, warp_memory, 0);
             
@@ -1204,25 +1295,25 @@ namespace Multi_Vote{
         
             
                 
-                let (__warp_se_147) = warp_eq(__warp_37_position, 2);
+                let (__warp_se_160) = warp_eq(__warp_37_position, 2);
                 
-                if (__warp_se_147 != 0){
+                if (__warp_se_160 != 0){
                 
                     
                         
-                        let (__warp_se_148) = WSM1_Proposal_2cb16fd2_against(__warp_35_proposal);
+                        let (__warp_se_161) = WSM1_Proposal_2cb16fd2_against(__warp_35_proposal);
                         
-                        let (__warp_se_149) = WSM1_Proposal_2cb16fd2_against(__warp_35_proposal);
+                        let (__warp_se_162) = WSM1_Proposal_2cb16fd2_against(__warp_35_proposal);
                         
-                        let (__warp_se_150) = WS2_READ_Uint256(__warp_se_149);
+                        let (__warp_se_163) = WS2_READ_Uint256(__warp_se_162);
                         
-                        let (__warp_se_151) = warp_sub256(__warp_se_150, __warp_38_total_amount);
+                        let (__warp_se_164) = warp_sub256(__warp_se_163, __warp_38_total_amount);
                         
-                        WS_WRITE1(__warp_se_148, __warp_se_151);
+                        WS_WRITE1(__warp_se_161, __warp_se_164);
                     
                     Multi_Vote.unVote_2c70d64e_if_part2(__warp_36_from_vote, __warp_35_proposal, __warp_34__from);
                     
-                    let __warp_uv5 = ();
+                    let __warp_uv7 = ();
                     
                     default_dict_finalize(warp_memory_start, warp_memory, 0);
                     
@@ -1232,19 +1323,19 @@ namespace Multi_Vote{
                 
                     
                         
-                        let (__warp_se_152) = WSM2_Proposal_2cb16fd2_abstain(__warp_35_proposal);
+                        let (__warp_se_165) = WSM2_Proposal_2cb16fd2_abstain(__warp_35_proposal);
                         
-                        let (__warp_se_153) = WSM2_Proposal_2cb16fd2_abstain(__warp_35_proposal);
+                        let (__warp_se_166) = WSM2_Proposal_2cb16fd2_abstain(__warp_35_proposal);
                         
-                        let (__warp_se_154) = WS2_READ_Uint256(__warp_se_153);
+                        let (__warp_se_167) = WS2_READ_Uint256(__warp_se_166);
                         
-                        let (__warp_se_155) = warp_sub256(__warp_se_154, __warp_38_total_amount);
+                        let (__warp_se_168) = warp_sub256(__warp_se_167, __warp_38_total_amount);
                         
-                        WS_WRITE1(__warp_se_152, __warp_se_155);
+                        WS_WRITE1(__warp_se_165, __warp_se_168);
                     
                     Multi_Vote.unVote_2c70d64e_if_part2(__warp_36_from_vote, __warp_35_proposal, __warp_34__from);
                     
-                    let __warp_uv6 = ();
+                    let __warp_uv8 = ();
                     
                     default_dict_finalize(warp_memory_start, warp_memory, 0);
                     
@@ -1262,11 +1353,11 @@ namespace Multi_Vote{
 
 
         
-        let (__warp_se_161) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
+        let (__warp_se_174) = WS2_READ_Uint256(Multi_Vote.__warp_0_curr_proposal);
         
         
         
-        return (__warp_se_161,);
+        return (__warp_se_174,);
 
     }
 
@@ -1277,11 +1368,11 @@ namespace Multi_Vote{
 
 
         
-        let (__warp_se_162) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
+        let (__warp_se_175) = WS1_READ_felt(Multi_Vote.__warp_1_vote_in_progress);
         
         
         
-        return (__warp_se_162,);
+        return (__warp_se_175,);
 
     }
 
@@ -1292,11 +1383,11 @@ namespace Multi_Vote{
 
 
         
-        let (__warp_se_163) = WS2_READ_Uint256(Multi_Vote.__warp_2_total_supply);
+        let (__warp_se_176) = WS2_READ_Uint256(Multi_Vote.__warp_2_total_supply);
         
         
         
-        return (__warp_se_163,);
+        return (__warp_se_176,);
 
     }
 
@@ -1309,15 +1400,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_42__proposal);
         
-        let (__warp_se_164) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_42__proposal);
+        let (__warp_se_177) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_42__proposal);
         
-        let (__warp_se_165) = WSM0_Proposal_2cb16fd2_pro(__warp_se_164);
+        let (__warp_se_178) = WSM0_Proposal_2cb16fd2_pro(__warp_se_177);
         
-        let (__warp_se_166) = WS2_READ_Uint256(__warp_se_165);
+        let (__warp_se_179) = WS2_READ_Uint256(__warp_se_178);
         
         
         
-        return (__warp_se_166,);
+        return (__warp_se_179,);
 
     }
 
@@ -1330,15 +1421,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_44__proposal);
         
-        let (__warp_se_167) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_44__proposal);
+        let (__warp_se_180) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_44__proposal);
         
-        let (__warp_se_168) = WSM1_Proposal_2cb16fd2_against(__warp_se_167);
+        let (__warp_se_181) = WSM1_Proposal_2cb16fd2_against(__warp_se_180);
         
-        let (__warp_se_169) = WS2_READ_Uint256(__warp_se_168);
+        let (__warp_se_182) = WS2_READ_Uint256(__warp_se_181);
         
         
         
-        return (__warp_se_169,);
+        return (__warp_se_182,);
 
     }
 
@@ -1351,15 +1442,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_46__proposal);
         
-        let (__warp_se_170) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_46__proposal);
+        let (__warp_se_183) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_46__proposal);
         
-        let (__warp_se_171) = WSM2_Proposal_2cb16fd2_abstain(__warp_se_170);
+        let (__warp_se_184) = WSM2_Proposal_2cb16fd2_abstain(__warp_se_183);
         
-        let (__warp_se_172) = WS2_READ_Uint256(__warp_se_171);
+        let (__warp_se_185) = WS2_READ_Uint256(__warp_se_184);
         
         
         
-        return (__warp_se_172,);
+        return (__warp_se_185,);
 
     }
 
@@ -1372,15 +1463,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_48__proposal);
         
-        let (__warp_se_173) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_48__proposal);
+        let (__warp_se_186) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_48__proposal);
         
-        let (__warp_se_174) = WSM3_Proposal_2cb16fd2_result(__warp_se_173);
+        let (__warp_se_187) = WSM3_Proposal_2cb16fd2_result(__warp_se_186);
         
-        let (__warp_se_175) = WS1_READ_felt(__warp_se_174);
+        let (__warp_se_188) = WS1_READ_felt(__warp_se_187);
         
         
         
-        return (__warp_se_175,);
+        return (__warp_se_188,);
 
     }
 
@@ -1395,21 +1486,21 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_50__proposal);
         
-        let (__warp_se_176) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_50__proposal);
+        let (__warp_se_189) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_50__proposal);
         
-        let (__warp_se_177) = WSM8_Proposal_2cb16fd2_votes(__warp_se_176);
+        let (__warp_se_190) = WSM10_Proposal_2cb16fd2_votes(__warp_se_189);
         
-        let (__warp_se_178) = WS0_READ_warp_id(__warp_se_177);
+        let (__warp_se_191) = WS0_READ_warp_id(__warp_se_190);
         
-        let (__warp_se_179) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_178, __warp_51_voter);
+        let (__warp_se_192) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_191, __warp_51_voter);
         
-        let (__warp_se_180) = WSM9_Vote_a1796658_amount(__warp_se_179);
+        let (__warp_se_193) = WSM11_Vote_a1796658_amount(__warp_se_192);
         
-        let (__warp_se_181) = WS2_READ_Uint256(__warp_se_180);
+        let (__warp_se_194) = WS2_READ_Uint256(__warp_se_193);
         
         
         
-        return (__warp_se_181,);
+        return (__warp_se_194,);
 
     }
 
@@ -1424,21 +1515,21 @@ namespace Multi_Vote{
         
         warp_external_input_check_int256(__warp_53__proposal);
         
-        let (__warp_se_182) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_53__proposal);
+        let (__warp_se_195) = WS0_INDEX_Uint256_to_Proposal_2cb16fd2(Multi_Vote.__warp_3_proposals, __warp_53__proposal);
         
-        let (__warp_se_183) = WSM8_Proposal_2cb16fd2_votes(__warp_se_182);
+        let (__warp_se_196) = WSM10_Proposal_2cb16fd2_votes(__warp_se_195);
         
-        let (__warp_se_184) = WS0_READ_warp_id(__warp_se_183);
+        let (__warp_se_197) = WS0_READ_warp_id(__warp_se_196);
         
-        let (__warp_se_185) = WS3_INDEX_felt_to_Vote_a1796658(__warp_se_184, __warp_54_voter);
+        let (__warp_se_198) = WS4_INDEX_felt_to_Vote_a1796658(__warp_se_197, __warp_54_voter);
         
-        let (__warp_se_186) = WSM10_Vote_a1796658_position(__warp_se_185);
+        let (__warp_se_199) = WSM12_Vote_a1796658_position(__warp_se_198);
         
-        let (__warp_se_187) = WS1_READ_felt(__warp_se_186);
+        let (__warp_se_200) = WS1_READ_felt(__warp_se_199);
         
         
         
-        return (__warp_se_187,);
+        return (__warp_se_200,);
 
     }
 
@@ -1451,15 +1542,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_address(__warp_56_user);
         
-        let (__warp_se_188) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_56_user);
+        let (__warp_se_201) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_56_user);
         
-        let (__warp_se_189) = WSM5_User_ba076238_total_balance(__warp_se_188);
+        let (__warp_se_202) = WSM5_User_ba076238_total_balance(__warp_se_201);
         
-        let (__warp_se_190) = WS2_READ_Uint256(__warp_se_189);
+        let (__warp_se_203) = WS2_READ_Uint256(__warp_se_202);
         
         
         
-        return (__warp_se_190,);
+        return (__warp_se_203,);
 
     }
 
@@ -1472,15 +1563,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_address(__warp_58_user);
         
-        let (__warp_se_191) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_58_user);
+        let (__warp_se_204) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_58_user);
         
-        let (__warp_se_192) = WSM4_User_ba076238_total_availible(__warp_se_191);
+        let (__warp_se_205) = WSM4_User_ba076238_total_availible(__warp_se_204);
         
-        let (__warp_se_193) = WS2_READ_Uint256(__warp_se_192);
+        let (__warp_se_206) = WS2_READ_Uint256(__warp_se_205);
         
         
         
-        return (__warp_se_193,);
+        return (__warp_se_206,);
 
     }
 
@@ -1493,15 +1584,15 @@ namespace Multi_Vote{
         
         warp_external_input_check_address(__warp_60_user);
         
-        let (__warp_se_194) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_60_user);
+        let (__warp_se_207) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_60_user);
         
-        let (__warp_se_195) = WSM7_User_ba076238_total_power(__warp_se_194);
+        let (__warp_se_208) = WSM9_User_ba076238_total_power(__warp_se_207);
         
-        let (__warp_se_196) = WS2_READ_Uint256(__warp_se_195);
+        let (__warp_se_209) = WS2_READ_Uint256(__warp_se_208);
         
         
         
-        return (__warp_se_196,);
+        return (__warp_se_209,);
 
     }
 
@@ -1516,19 +1607,67 @@ namespace Multi_Vote{
         
         warp_external_input_check_address(__warp_62_user);
         
-        let (__warp_se_197) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_62_user);
+        let (__warp_se_210) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_62_user);
         
-        let (__warp_se_198) = WSM6_User_ba076238_delegates(__warp_se_197);
+        let (__warp_se_211) = WSM6_User_ba076238_delegates(__warp_se_210);
         
-        let (__warp_se_199) = WS0_READ_warp_id(__warp_se_198);
+        let (__warp_se_212) = WS0_READ_warp_id(__warp_se_211);
         
-        let (__warp_se_200) = WS2_INDEX_felt_to_Uint256(__warp_se_199, __warp_63_delegatee);
+        let (__warp_se_213) = WS2_INDEX_felt_to_Uint256(__warp_se_212, __warp_63_delegatee);
         
-        let (__warp_se_201) = WS2_READ_Uint256(__warp_se_200);
+        let (__warp_se_214) = WS2_READ_Uint256(__warp_se_213);
         
         
         
-        return (__warp_se_201,);
+        return (__warp_se_214,);
+
+    }
+
+
+    @view
+    func get_user_history_size_3c7e3117{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt}(__warp_65_user : felt)-> (__warp_66 : Uint256){
+    alloc_locals;
+
+
+        
+        warp_external_input_check_address(__warp_65_user);
+        
+        let (__warp_se_215) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_65_user);
+        
+        let (__warp_se_216) = WSM8_User_ba076238_history_size(__warp_se_215);
+        
+        let (__warp_se_217) = WS2_READ_Uint256(__warp_se_216);
+        
+        
+        
+        return (__warp_se_217,);
+
+    }
+
+
+    @view
+    func get_user_history_7363c9fa{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr : felt}(__warp_67_user : felt, __warp_68_index : Uint256)-> (__warp_69 : felt){
+    alloc_locals;
+
+
+        
+        warp_external_input_check_int256(__warp_68_index);
+        
+        warp_external_input_check_address(__warp_67_user);
+        
+        let (__warp_se_218) = WS1_INDEX_felt_to_User_ba076238(Multi_Vote.__warp_4_users, __warp_67_user);
+        
+        let (__warp_se_219) = WSM7_User_ba076238_history(__warp_se_218);
+        
+        let (__warp_se_220) = WS0_READ_warp_id(__warp_se_219);
+        
+        let (__warp_se_221) = WS3_INDEX_Uint256_to_felt(__warp_se_220, __warp_68_index);
+        
+        let (__warp_se_222) = WS1_READ_felt(__warp_se_221);
+        
+        
+        
+        return (__warp_se_222,);
 
     }
 
