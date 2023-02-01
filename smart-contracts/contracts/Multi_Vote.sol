@@ -97,12 +97,11 @@ contract Multi_Vote {
 
         //_to's voting power goes up
         to_user.total_power += _amount;
-        
     }
 
     function undelegate(address _to, uint256 _amount) public {
         require(!vote_in_progress, "vote in progress");
-        
+
         address _from = msg.sender;
 
         User storage from_user = users[_from];
@@ -120,7 +119,7 @@ contract Multi_Vote {
         from_user.delegates[_to] -= _amount;
 
         //_to's voting power goes down
-        to_user.total_power -= _amount; 
+        to_user.total_power -= _amount;
 
     }
 
@@ -214,64 +213,63 @@ contract Multi_Vote {
     }
 
 
-    function get_curr_proposal() view public returns(uint256) {
+    function get_curr_proposal() public view returns(uint256) {
         return curr_proposal;
     }
 
-    function get_vote_in_progress() view public returns(bool) {
+    function get_vote_in_progress() public view returns(bool) {
         return vote_in_progress;
     }
 
-    function get_total_supply() view public returns(uint256) {
+    function get_total_supply() public view returns(uint256) {
         return total_supply;
     }
 
-    function get_proposal_pro(uint256 _proposal) view public returns(uint256) {
+    function get_proposal_pro(uint256 _proposal) public view returns(uint256) {
         return proposals[_proposal].pro;
     }
 
-    function get_proposal_against(uint256 _proposal) view public returns(uint256) {
+    function get_proposal_against(uint256 _proposal) public view returns(uint256) {
         return proposals[_proposal].against;
     }
 
-    function get_proposal_abstain(uint256 _proposal) view public returns(uint256) {
+    function get_proposal_abstain(uint256 _proposal) public view returns(uint256) {
         return proposals[_proposal].abstain;
     }
 
-    function get_proposal_result(uint256 _proposal) view public returns(uint8) {
+    function get_proposal_result(uint256 _proposal) public view returns(uint8) {
         return proposals[_proposal].result;
     }
 
-    function get_vote_amount(uint256 _proposal, address voter) view public returns(uint256) {
+    function get_vote_amount(uint256 _proposal, address voter) public view returns(uint256) {
         return proposals[_proposal].votes[voter].amount;
     }
 
-    function get_vote_position(uint256 _proposal, address voter) view public returns(uint8) {
+    function get_vote_position(uint256 _proposal, address voter) public view returns(uint8) {
         return proposals[_proposal].votes[voter].position;
     }
 
-    function get_user_total_balance(address user) view public returns(uint256) {
+    function get_user_total_balance(address user) public view returns(uint256) {
         return users[user].total_balance;
     }
 
-    function get_user_total_availible(address user) view public returns(uint256) {
+    function get_user_total_availible(address user) public view returns(uint256) {
         return users[user].total_availible;
     }
 
-    function get_user_total_power(address user) view public returns(uint256) {
+    function get_user_total_power(address user) public view returns(uint256) {
         return users[user].total_power;
     }
 
-    function get_user_delgated_amount(address user, address delegatee) view public returns(uint256) {
+    function get_user_delgated_amount(address user, address delegatee) public view returns(uint256) {
         return users[user].delegates[delegatee];
     }
 
-    function get_user_history_size(address user) view public returns(uint256) {
+    function get_user_history_size(address user) public view returns(uint256) {
         return users[user].history_size;
     }
 
-    function get_user_history(address user, uint256 index) view public returns(address) {
+    function get_user_history(address user, uint256 index) public view returns(address) {
         return users[user].history[index];
     }
-    
 }

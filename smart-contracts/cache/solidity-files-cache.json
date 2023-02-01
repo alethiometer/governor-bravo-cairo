@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/jonahburian/Desktop/CIS/Personal/Starknet_Hackathon/starknet-delegation/smart-contracts/contracts/Multi_Vote.sol": {
-      "lastModificationDate": 1675150575794,
-      "contentHash": "ef6b3cb8028254c59d64ffbc0a6c5b7d",
+      "lastModificationDate": 1675194927903,
+      "contentHash": "9a6d2cd0ce6721ee722494cae1731cb4",
       "sourceName": "contracts/Multi_Vote.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -25,6 +25,9 @@
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": false
           }
         }
       },
