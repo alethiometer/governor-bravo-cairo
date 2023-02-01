@@ -35,9 +35,11 @@ describe("Multi_Vote", () => {
     await test_user_acounts(addr3.address, 0, 0, 0);
 
     //test delgated map
-    await test_all_user_delgated(addr1, { addr1: 0, addr2: 0, addr3: 0 });
-    await test_all_user_delgated(addr2, { addr1: 0, addr2: 0, addr3: 0 });
-    await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+    await test_all_user_delgated(addr1, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+    await test_all_user_delgated(addr2, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+    await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+
+    [[addr1, 0], [addr2, 0], [addr3, 0]]
   });
 
   describe("transferTo", () => {
@@ -89,13 +91,13 @@ describe("Multi_Vote", () => {
         [addr1.address],
         [addr2.address, addr3.address]
       );
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
       await test_user_acounts(addr1.address, 1000, 990, 10);
       await test_user_acounts(addr2.address, 0, 0, 0);
       await test_user_acounts(addr3.address, 0, 0, 0);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 0, addr3: 0 });
-      await test_all_user_delgated(addr2, { addr1: 0, addr2: 0, addr3: 0 });
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 0], [addr3, 0]]);
+      await test_all_user_delgated(addr2, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 1 delegate to user 2
       await delegateTo(addr1, addr2.address, 15);
@@ -107,26 +109,26 @@ describe("Multi_Vote", () => {
       await test_user_acounts(addr1.address, 1000, 975, 10);
       await test_user_acounts(addr2.address, 0, 0, 15);
       await test_user_acounts(addr3.address, 0, 0, 0);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 0 });
-      await test_all_user_delgated(addr2, { addr1: 0, addr2: 0, addr3: 0 });
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 0]]);
+      await test_all_user_delgated(addr2, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 1 delegate to user 3
       await delegateTo(addr1, addr3.address, 20);
       await test_user_acounts(addr1.address, 1000, 955, 10);
       await test_user_acounts(addr2.address, 0, 0, 15);
       await test_user_acounts(addr3.address, 0, 0, 20);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 0, addr2: 0, addr3: 0 });
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 0], [addr2, 0], [addr3, 0]]);
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 1 transfer to user 2
       await transferTo(addr1, addr2.address, 100);
       await test_user_acounts(addr1.address, 900, 855, 10);
       await test_user_acounts(addr2.address, 100, 100, 15);
       await test_user_acounts(addr3.address, 0, 0, 20);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 2 transfer to user 1
       //user 2 transfer to user 2
@@ -137,18 +139,18 @@ describe("Multi_Vote", () => {
       await test_user_acounts(addr1.address, 900, 855, 15);
       await test_user_acounts(addr2.address, 100, 85, 20);
       await test_user_acounts(addr3.address, 0, 0, 25);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 5, addr2: 5, addr3: 5 });
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 5], [addr2, 5], [addr3, 5]]);
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 2 transfer to user 3
       await transferTo(addr2, addr3.address, 50);
       await test_user_acounts(addr1.address, 900, 855, 15);
       await test_user_acounts(addr2.address, 50, 35, 20);
       await test_user_acounts(addr3.address, 50, 50, 25);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 5, addr2: 5, addr3: 5 });
-      await test_all_user_delgated(addr3, { addr1: 0, addr2: 0, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 5], [addr2, 5], [addr3, 5]]);
+      await test_all_user_delgated(addr3, [[addr1, 0], [addr2, 0], [addr3, 0]]);
 
       //user 3 delegates to user 1
       //user 3 delegates to user 2
@@ -159,9 +161,9 @@ describe("Multi_Vote", () => {
       await test_user_acounts(addr1.address, 900, 855, 16);
       await test_user_acounts(addr2.address, 50, 35, 21);
       await test_user_acounts(addr3.address, 50, 47, 26);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 5, addr2: 5, addr3: 5 });
-      await test_all_user_delgated(addr3, { addr1: 1, addr2: 1, addr3: 1 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 5], [addr2, 5], [addr3, 5]]);
+      await test_all_user_delgated(addr3, [[addr1, 1], [addr2, 1], [addr3, 1]]);
 
       await test_user_history(
         addr1.address,
@@ -188,9 +190,9 @@ describe("Multi_Vote", () => {
       await test_user_acounts(addr1.address, 900, 865, 16);
       await test_user_acounts(addr2.address, 50, 35, 11);
       await test_user_acounts(addr3.address, 50, 48, 25);
-      await test_all_user_delgated(addr1, { addr1: 10, addr2: 5, addr3: 20 });
-      await test_all_user_delgated(addr2, { addr1: 5, addr2: 5, addr3: 5 });
-      await test_all_user_delgated(addr3, { addr1: 1, addr2: 1, addr3: 0 });
+      await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 5], [addr3, 20]]);
+      await test_all_user_delgated(addr2, [[addr1, 5], [addr2, 5], [addr3, 5]]);
+      await test_all_user_delgated(addr3, [[addr1, 1], [addr2, 1], [addr3, 0]]);
     });
 
     it("cant delgate more than you have", async () => {
@@ -303,6 +305,165 @@ describe("Multi_Vote", () => {
       await test_vote_info(0, 0, 0, 0, 0);
       await test_vote_info(1, 0, 0, 0, 0);
     });
+
+
+    describe("actual voting", () => {
+        it("votes are recorded", async () => {
+            await build_simple_situation();
+            await propose(addr1);
+
+            await test_user_vote(1, addr1.address, 0, 0);
+            await test_user_vote(1, addr2.address, 0, 0);
+            await test_user_vote(1, addr3.address, 0, 0);
+
+            await vote(addr1, 1, 16);
+            await test_user_vote(1, addr1.address, 16, 1);
+            await test_user_vote(1, addr2.address, 0, 0);
+            await test_user_vote(1, addr3.address, 0, 0);
+
+            await vote(addr2, 2, 3);
+            await test_user_vote(1, addr1.address, 16, 1);
+            await test_user_vote(1, addr2.address, 3, 2);
+            await test_user_vote(1, addr3.address, 0, 0);
+
+            await vote(addr3, 3, 3);
+            await test_user_vote(1, addr1.address, 16, 1);
+            await test_user_vote(1, addr2.address, 3, 2);
+            await test_user_vote(1, addr3.address, 3, 3);
+
+            await test_user_acounts(addr1.address, 900, 855, 16);
+            await test_user_acounts(addr2.address, 50, 35, 21);
+            await test_user_acounts(addr3.address, 50, 47, 26);
+
+            await test_vote_info(1, 16, 3, 3, 0);
+
+            await end_vote(addr1);
+
+            await test_vote_info(1, 16, 3, 3, 1);
+
+
+        });
+
+        it("can't vote twice", async () => {
+            await build_simple_situation();
+            await propose(addr1);
+            await vote(addr1, 1, 16);
+
+            await test_vote_info(1, 16, 0, 0, 0);
+            await test_user_vote(1, addr1.address, 16, 1);
+
+            await expect(vote(addr1, 1, 1)).to.be.reverted;
+
+            await test_vote_info(1, 16, 0, 0, 0);
+            await test_user_vote(1, addr1.address, 16, 1);
+        });
+
+        it("can't vote more than your power", async () => {
+            await expect(vote(addr1, 1, 1)).to.be.reverted;
+            await build_simple_situation();
+            await propose(addr1);
+
+            await expect(vote(addr1, 1, 1000)).to.be.reverted;
+
+            await test_vote_info(1, 0, 0, 0, 0);
+            await test_user_vote(1, addr1.address, 0, 0);
+        });
+
+        it("can't vote on a non position", async () => {
+            await expect(vote(addr1, 1, 1)).to.be.reverted;
+
+            await build_simple_situation();
+            await propose(addr1);
+
+            await expect(vote(addr1, 4, 1)).to.be.reverted;
+
+            await test_vote_info(1, 0, 0, 0, 0);
+            await test_user_vote(1, addr1.address, 0, 0);
+        });
+
+        it("can all vote on the same thing", async () => {
+            await build_simple_situation();
+            await propose(addr1);
+
+            await vote(addr1, 1, 1);
+            await vote(addr2, 1, 1);
+            await vote(addr3, 1, 1);
+
+            await test_vote_info(1, 3, 0, 0, 0);
+            await end_vote(addr1);
+            await test_vote_info(1, 3, 0, 0, 1);
+        });
+
+        it("multiple propositions", async () => {
+            await build_simple_situation();
+            await propose(addr1);
+
+            await vote(addr1, 1, 1);
+            await vote(addr2, 1, 1);
+            await vote(addr3, 1, 1);
+            
+            await test_vote_info(1, 3, 0, 0, 0);
+            await end_vote(addr1);
+            await test_vote_info(1, 3, 0, 0, 1);
+
+
+            await propose(addr1);
+
+            await vote(addr1, 2, 1);
+            await vote(addr2, 2, 1);
+            await vote(addr3, 2, 1);
+            
+            await test_vote_info(2, 0, 3, 0, 0);
+            await end_vote(addr1);
+            await test_vote_info(1, 3, 0, 0, 1);
+            await test_vote_info(2, 0, 3, 0, 2);
+
+
+            await propose(addr1);
+
+            await vote(addr1, 3, 1);
+            await vote(addr2, 3, 1);
+            await vote(addr3, 3, 1);
+            
+            await test_vote_info(3, 0, 0, 3, 0);
+            await end_vote(addr1);
+            await test_vote_info(1, 3, 0, 0, 1);
+            await test_vote_info(2, 0, 3, 0, 2);
+            await test_vote_info(3, 0, 0, 3, 3);
+        });
+
+        it("unVote", async () => {
+            await expect(unVote(addr1)).to.be.reverted;
+
+            await build_simple_situation();
+            await propose(addr1);
+
+            await expect(unVote(addr1)).to.be.reverted;
+
+            await vote(addr1, 1, 1);
+            await vote(addr2, 1, 1);
+            await vote(addr3, 1, 1);
+
+            await unVote(addr1);
+            await vote(addr1, 2, 10);
+            
+            await test_vote_info(1, 2, 10, 0, 0);
+
+            await unVote(addr1);
+            await vote(addr1, 3, 10);
+            
+            await test_vote_info(1, 2, 0, 10, 0);
+
+            await unVote(addr1);
+            await vote(addr1, 1, 10);
+            
+            await test_vote_info(1, 12, 0, 0, 0);
+
+            await end_vote(addr1);
+            await test_vote_info(1, 12, 0, 0, 1);
+        });
+
+    });
   });
 });
 
@@ -362,7 +523,7 @@ async function get_proposal_result(proposal) {
 }
 
 async function get_vote_amount(proposal, voter) {
-  return await multi_vote.get_vote_position(proposal, voter);
+  return await multi_vote.get_vote_amount(proposal, voter);
 }
 
 async function get_vote_position(proposal, voter) {
@@ -423,11 +584,11 @@ async function test_user_acounts(user, total, availible, power) {
 }
 
 async function test_all_user_delgated(user, delegates) {
-  for (let i = 0; i < delegates.length; i++) {
-    var delegate = delegates[i];
-    var amount = await get_user_delgated_amount(user.address, delegate.address);
-    expect(amount).to.equal(delegates[delegate]);
-  }
+    for (let i = 0; i < delegates.length; i++) {
+        var tup = delegates[i];
+        var amount = await get_user_delgated_amount(user.address, tup[0].address);
+        expect(amount).to.equal(tup[1]);
+    }
 }
 
 async function test_vote_info(proposal, pro, against, abstain, result) {
@@ -458,7 +619,7 @@ async function build_simple_situation() {
   await test_user_acounts(addr1.address, 900, 855, 16);
   await test_user_acounts(addr2.address, 50, 35, 21);
   await test_user_acounts(addr3.address, 50, 47, 26);
-  await test_all_user_delgated(addr1, { addr1: 10, addr2: 15, addr3: 20 });
-  await test_all_user_delgated(addr2, { addr1: 5, addr2: 5, addr3: 5 });
-  await test_all_user_delgated(addr3, { addr1: 1, addr2: 1, addr3: 1 });
+  await test_all_user_delgated(addr1, [[addr1, 10], [addr2, 15], [addr3, 20]]);
+  await test_all_user_delgated(addr2, [[addr1, 5], [addr2, 5], [addr3, 5]]);
+  await test_all_user_delgated(addr3, [[addr1, 1], [addr2, 1], [addr3, 1]]);
 }
